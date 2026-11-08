@@ -2,7 +2,7 @@
 // Tus datos reales se cambian en Más → Ajustes y se guardan solo en tu dispositivo.
 
 // Súbela junto con VERSION en sw.js en cada publicación.
-export const APP_VERSION = 'gd-v6';
+export const APP_VERSION = 'gd-v7';
 
 export const INSTRUMENTS = {
   EURUSD: { contract: 100000, unit: 0.0001, unitName: 'pips', minStop: 0.0015, digits: 5, ccys: ['EUR', 'USD'] },

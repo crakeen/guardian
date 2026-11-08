@@ -126,3 +126,4 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .acc { border-top: 1px solid var(--line); padding: 6px 0; }
 .acc.on .row b:first-child { color: var(--accent); }
 .accform { background: var(--bg); border-radius: 10px; padding: 4px 10px 10px; margin-top: 6px; }
+.net { font-weight: 600; margin: 4px 0; }

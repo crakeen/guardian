@@ -3,7 +3,8 @@ import { h, card, field, select, seg, num, rStr, usd, pctStr } from './dom.js';
 import { INSTRUMENTS } from '../config.js';
 import { fmtDate, madrid } from '../time.js';
 import { uid } from '../store.js';
-import { accountOf, accountName, findAccount, tradesOf, pctOf } from '../accounts.js';
+import { accountOf, accountName, findAccount, tradesOf, pctOf, isMoney } from '../accounts.js';
+import { moneyFields, readMoney, moneyForm } from './money.js';
 import { acctTabs } from './acctTabs.js';
 
 const WINDOWS = ['Londres 9:00', 'Londres 10:00', 'Londres', 'Apertura semanal', 'Nueva York', 'Fuera de ventana'];
@@ -18,6 +19,29 @@ function postmortem(t) {
   if (t.checklistOk && !t.outOfPlan && t.r < 0) lines.push('Proceso correcto con resultado negativo: es una pérdida buena. No cambies nada por esta.');
   if ((!t.checklistOk || t.outOfPlan) && t.r > 0) lines.push('Ganó fuera de plan: es la más peligrosa, porque refuerza el hábito.');
   return lines;
+}
+
+// Desglose beneficio / swap / comisión / neto, editable en cuentas con dinero.
+function moneyBlock(ctx, t) {
+  if (t.status !== 'closed' || !isMoney(ctx.state, accountOf(t))) return null;
+  const stop = (e) => e.stopPropagation();
+  if (ctx.ui.editMoney === t.id) {
+    const f = (ctx.ui.moneyForm ||= moneyForm(t));
+    return h('div', { class: 'accform', onclick: stop }, moneyFields(f),
+      h('div', { class: 'actions' },
+        h('button', { class: 'primary', onclick: () => {
+          const m = readMoney(f);
+          if (!m) { alert('Escribe el beneficio que marca MT5.'); return; }
+          ctx.commit((s) => { Object.assign(s.trades.find((x) => x.id === t.id), m); ctx.ui.editMoney = null; ctx.ui.moneyForm = null; });
+        } }, 'Guardar'),
+        h('button', { onclick: () => { ctx.ui.editMoney = null; ctx.ui.moneyForm = null; ctx.render(); } }, 'Cancelar')));
+  }
+  const has = typeof t.gross === 'number';
+  return h('div', { onclick: stop },
+    h('p', { class: 'muted' }, has
+      ? `Beneficio ${usd(t.gross)} · swap ${usd(t.swap || 0)} · comisión ${usd(t.commission || 0)} → neto ${usd(t.pnl)}`
+      : `Neto ${usd(t.pnl ?? 0)} (sin desglose de swap y comisión)`),
+    h('button', { class: 'ghost', onclick: () => { ctx.ui.editMoney = t.id; ctx.ui.moneyForm = null; ctx.render(); } }, has ? 'Editar beneficio, swap y comisión' : 'Añadir swap y comisión'));
 }
 
 function tradeCard(ctx, t) {
@@ -36,6 +60,7 @@ function tradeCard(ctx, t) {
       typeof t.pnl === 'number' && findAccount(ctx.state, accountOf(t))?.type !== 'forward' ? h('span', { class: 'b' }, usd(t.pnl)) : null),
     open ? h('div', { class: 'detail' },
       t.entry ? h('p', { class: 'muted' }, `Entrada ${t.entry} · stop ${t.stop} · objetivo ${t.tp} · ${t.lots} lotes · riesgo ${usd(t.riskUSD)}`) : null,
+      moneyBlock(ctx, t),
       t.reason ? h('p', {}, h('b', {}, 'Motivo: '), t.reason) : null,
       t.note ? h('p', {}, h('b', {}, 'Nota: '), t.note) : null,
       h('ul', { class: 'pm' }, postmortem(t).map((l) => h('li', {}, l))),
@@ -52,20 +77,25 @@ function addPast(ctx) {
   const f = (ctx.ui.past ||= { date: madrid(ctx.now()).date, asset: 'EURUSD', dir: 'buy', r: '', setup: 'si', window: 'Londres 9:00', note: '', accountId: def });
   if (!ctx.ui.showPast) return h('button', { onclick: () => { ctx.ui.past = null; ctx.ui.showPast = true; ctx.render(); } }, 'Añadir operación pasada');
   return card('Operación pasada',
-    field('Cuenta', select(f.accountId, Object.fromEntries(ctx.state.accounts.map((a) => [a.id, a.name])), (v) => { f.accountId = v; })),
+    field('Cuenta', select(f.accountId, Object.fromEntries(ctx.state.accounts.map((a) => [a.id, a.name])), (v) => { f.accountId = v; ctx.render(); })),
     field('Fecha', h('input', { type: 'date', value: f.date, oninput: (e) => { f.date = e.target.value; } })),
     field('Activo', select(f.asset, Object.fromEntries(Object.keys(INSTRUMENTS).map((k) => [k, k])), (v) => { f.asset = v; })),
     field('Dirección', seg(f.dir, { buy: 'Compra', sell: 'Venta' }, (v) => { f.dir = v; ctx.render(); })),
-    field('Resultado en R', h('input', { inputmode: 'decimal', value: f.r, placeholder: '+2, −1 o 0 (break even = 0, nunca "BE")', oninput: (e) => { f.r = e.target.value; } })),
+    isMoney(ctx.state, f.accountId) ? moneyFields(f.money ||= {})
+      : field('Resultado en R', h('input', { inputmode: 'decimal', value: f.r, placeholder: '+2, −1 o 0 (break even = 0, nunca "BE")', oninput: (e) => { f.r = e.target.value; } })),
     field('¿Setup completo?', seg(f.setup, { si: 'Sí, los 6 puntos', no: 'No' }, (v) => { f.setup = v; ctx.render(); })),
     field('Ventana', select(f.window, Object.fromEntries(WINDOWS.map((w) => [w, w])), (v) => { f.window = v; })),
     field('Nota', h('textarea', { rows: 2, value: f.note, oninput: (e) => { f.note = e.target.value; } })),
     h('div', { class: 'actions' },
       h('button', { class: 'primary', onclick: () => {
-        const r = num(f.r);
+        const money = isMoney(ctx.state, f.accountId);
+        const m = money ? readMoney(f.money || {}) : null;
+        if (money && !m) { alert('Escribe el beneficio que marca MT5.'); return; }
+        const risk = (findAccount(ctx.state, f.accountId)?.size || 5000) * 0.005;
+        const r = money ? Math.round((m.pnl / risk) * 100) / 100 : num(f.r);
         if (r === null) { alert('Indica el resultado en R.'); return; }
         ctx.commit((s) => {
-          s.trades.push({ id: uid(), accountId: f.accountId, date: f.date || null, asset: f.asset, dir: f.dir, r, status: 'closed', checklistOk: f.setup === 'si', outOfPlan: false, window: f.window, note: f.note, riskUSD: s.config.startBalance * 0.005, closedAt: `${f.date}T12:00:00`, source: 'manual' });
+          s.trades.push({ id: uid(), ...(m || {}), accountId: f.accountId, date: f.date || null, asset: f.asset, dir: f.dir, r, status: 'closed', checklistOk: f.setup === 'si', outOfPlan: false, window: f.window, note: f.note, riskUSD: risk, closedAt: `${f.date}T12:00:00`, source: 'manual' });
           ctx.ui.past = null; ctx.ui.showPast = false;
         });
       } }, 'Guardar'),

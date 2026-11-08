@@ -10,7 +10,8 @@ function blocks(off) {
   return [
     { from: at(w0.start) - 90, to: at(w0.start) - 30, kind: 'prep', title: 'Rutina antes de operar',
       what: 'Antes de Londres.',
-      todo: ['Haz la rutina completa: está en la tarjeta "Rutina antes de operar".', 'Si no hay R alineada con el objetivo, hoy no se opera: lo apuntas como "sin R" y cierras la plataforma.'] },
+      todo: ['Haz los 6 pasos de la tarjeta "Rutina antes de operar", justo encima de este horario (solo aparece de lunes a viernes).', 'Si no hay R alineada con el objetivo, hoy no se opera: lo apuntas como "sin R" y cierras la plataforma.'],
+      link: true },
     { from: at(w0.start) - 30, to: at(w0.start), kind: 'wait', title: 'Espera',
       what: 'Plan escrito, plataforma abierta.',
       todo: ['No entras antes de la apertura de la vela de las 3:00 NY.', 'Lotaje calculado de antemano a partir del stop en pips.'] },
@@ -62,7 +63,8 @@ export function scheduleCard(ctx, now) {
           h('span', { class: 'time' }, `${hm(b.from)}–${b.to >= 1440 ? '…' : hm(b.to)}`),
           h('b', {}, b.title),
           badge ? h('span', { class: 'badge' }, badge) : null),
-        open ? h('div', { class: 'block-body' }, h('p', {}, b.what), h('ul', {}, b.todo.map((t) => h('li', {}, t)))) : null);
+        open ? h('div', { class: 'block-body' }, h('p', {}, b.what), h('ul', {}, b.todo.map((t) => h('li', {}, t))),
+          b.link && !closed ? h('button', { onclick: () => document.getElementById('rutina')?.scrollIntoView({ behavior: 'smooth' }) }, 'Ir a la rutina') : null) : null);
     }),
     closed ? null : h('button', { class: 'ghost', onclick: () => { ctx.ui.showAllBlocks = !showAll; ctx.render(); } }, showAll ? 'Ver solo el bloque actual' : 'Ver todos los bloques con detalle'));
 }

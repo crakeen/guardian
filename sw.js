@@ -1,6 +1,6 @@
 // Service worker: guarda la app para que funcione sin conexión.
 // Sube VERSION cada vez que publiques cambios.
-const VERSION = 'gd-v2';
+const VERSION = 'gd-v3';
 const FILES = [
   './', 'index.html', 'manifest.webmanifest', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png',
   'src/styles.css', 'src/app.js', 'src/config.js', 'src/time.js', 'src/store.js', 'src/news.js', 'src/metrics.js',

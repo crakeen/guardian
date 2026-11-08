@@ -65,7 +65,7 @@ export function renderToday(ctx) {
       h('p', { class: 'muted' }, 'El stop nunca se mueve en contra (R6). No añades a la posición (R7).'),
       renderClose(ctx, open)) : null,
     statusCard(st),
-    routineCard(ctx, st, now),
+    (() => { const r = routineCard(ctx, st, now); if (r) r.id = 'rutina'; return r; })(),
     scheduleCard(ctx, now),
     newsCard(ctx, now),
     numbersCard(ctx, st),

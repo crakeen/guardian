@@ -1,9 +1,9 @@
 // Diario: operaciones y días sin operación, con autopsia de cada una.
-import { h, card, field, select, seg, num, rStr, usd } from './dom.js';
+import { h, card, field, select, seg, num, rStr, usd, pctStr } from './dom.js';
 import { INSTRUMENTS } from '../config.js';
 import { fmtDate, madrid } from '../time.js';
 import { uid } from '../store.js';
-import { accountOf, accountName, findAccount, tradesOf } from '../accounts.js';
+import { accountOf, accountName, findAccount, tradesOf, pctOf } from '../accounts.js';
 import { acctTabs } from './acctTabs.js';
 
 const WINDOWS = ['Londres 9:00', 'Londres 10:00', 'Londres', 'Apertura semanal', 'Nueva York', 'Fuera de ventana'];
@@ -23,11 +23,13 @@ function postmortem(t) {
 function tradeCard(ctx, t) {
   const open = ctx.ui.openId === t.id;
   const clean = t.checklistOk && !t.outOfPlan && !t.flags?.ruleBroken;
+  const p = pctOf(ctx.state, t);
+  const val = p !== null ? p : t.r;
   return h('section', { class: 'card trade', onclick: () => { ctx.ui.openId = open ? null : t.id; ctx.render(); } },
     h('div', { class: 'row' },
       h('span', {}, fmtDate(t.date)),
       h('span', {}, `${t.asset}${t.dir ? (t.dir === 'buy' ? ' ↑' : ' ↓') : ''}`, t.window ? h('small', {}, ` · ${t.window}`) : null),
-      h('b', { class: t.status === 'open' ? '' : t.r > 0 ? 'pos' : t.r < 0 ? 'neg' : '' }, t.status === 'open' ? 'abierta' : rStr(t.r))),
+      h('b', { class: t.status === 'open' ? '' : val > 0 ? 'pos' : val < 0 ? 'neg' : '' }, t.status === 'open' ? 'abierta' : p !== null ? pctStr(p) : rStr(t.r))),
     h('div', { class: 'badges' },
       ctx.ui.acct === 'all' ? h('span', { class: 'b acct' }, accountName(ctx.state, accountOf(t))) : null,
       h('span', { class: clean ? 'b ok' : 'b no' }, clean ? 'checklist completo' : 'fuera de plan / incompleto'),

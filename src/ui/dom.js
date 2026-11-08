@@ -24,6 +24,7 @@ export const num = (s) => {
 
 export const usd = (v) => `${v < 0 ? '−' : ''}${Math.abs(v).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} $`;
 export const pct = (v, d = 0) => `${(v * 100).toLocaleString('es-ES', { maximumFractionDigits: d })} %`;
+export const pctStr = (v) => `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} %`;
 export const rStr = (r) => `${r > 0 ? '+' : r < 0 ? '−' : ''}${Math.abs(r).toLocaleString('es-ES', { maximumFractionDigits: 2 })}R`;
 
 export const card = (title, ...kids) => h('section', { class: 'card' }, title ? h('h2', {}, title) : null, ...kids);

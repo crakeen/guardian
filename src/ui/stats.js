@@ -1,17 +1,17 @@
 // Métricas: primero el cumplimiento, luego los números, siempre con su margen de error.
-import { h, card, pct, rStr, usd } from './dom.js';
+import { h, card, pct, rStr, usd, pctStr } from './dom.js';
 import { summary, byAsset, byWindow, bySetup, byWeekday, cleanStreak, groupBy, validTrades } from '../metrics.js';
 import { closedTrades } from '../rules/account.js';
-import { accountOf, accountName, findAccount, tradesOf, TYPES, STATUS } from '../accounts.js';
+import { accountOf, accountName, findAccount, tradesOf, TYPES, STATUS, pctOf, isMoney } from '../accounts.js';
 import { fmtDate } from '../time.js';
 import { acctTabs } from './acctTabs.js';
 import { MIN_TRADES } from '../rules/challenge.js';
 
-function table(title, rows) {
+function table(title, rows, u) {
   if (!rows.length) return null;
   return card(title, h('table', {},
-    h('tr', {}, ['', 'Ops', 'Acierto', 'Expect.', 'R total'].map((x) => h('th', {}, x))),
-    rows.map((r) => h('tr', {}, h('td', {}, r.key), h('td', {}, r.n), h('td', {}, pct(r.wr)), h('td', { class: r.expectancy > 0 ? 'pos' : r.expectancy < 0 ? 'neg' : '' }, rStr(r.expectancy)), h('td', {}, rStr(r.sumR))))),
+    h('tr', {}, ['', 'Ops', 'Acierto', u.avgShort, u.sumShort].map((x) => h('th', {}, x))),
+    rows.map((r) => h('tr', {}, h('td', {}, r.key), h('td', {}, r.n), h('td', {}, pct(r.wr)), h('td', { class: r.expectancy > 0 ? 'pos' : r.expectancy < 0 ? 'neg' : '' }, u.fmt(r.expectancy)), h('td', {}, u.fmt(r.sumR))))),
     rows.some((r) => r.n < 10) ? h('p', { class: 'muted' }, 'Grupos con menos de 10 operaciones: no saques conclusiones todavía.') : null);
 }
 
@@ -34,7 +34,12 @@ function accountCard(ctx, id, tr) {
 
 export function renderStats(ctx) {
   const { sel, bar } = acctTabs(ctx);
-  const tr = tradesOf(ctx.state, sel);
+  const money = sel !== 'all' && isMoney(ctx.state, sel);
+  // En una cuenta con dinero todo va en % de la cuenta; en el forward test y en Total, en R.
+  const tr = money ? tradesOf(ctx.state, sel).map((t) => ({ ...t, r: pctOf(ctx.state, t) ?? 0 })) : tradesOf(ctx.state, sel);
+  const u = money
+    ? { fmt: pctStr, avg: 'Media por operación', sum: 'Rentabilidad total', dd: 'Peor caída', avgShort: 'Media', sumShort: 'Total' }
+    : { fmt: rStr, avg: 'Expectancy', sum: 'R acumulada', dd: 'Peor racha (R)', avgShort: 'Expect.', sumShort: 'R total' };
   const s = summary(tr);
   const valid = validTrades(tr).length;
   const left = Math.max(0, MIN_TRADES - valid);
@@ -53,14 +58,14 @@ export function renderStats(ctx) {
       s.n ? h('p', { class: 'muted' }, `Con ${s.n} operaciones, tu acierto real está entre el ${pct(lo)} y el ${pct(hi)} (95 % de confianza). Un ${pct(s.wr)} medido no demuestra un ${pct(s.wr)} real.`) : null),
     card('Números',
       h('div', { class: 'grid' }, [
-        ['Acierto', s.n ? pct(s.wr) : '—'], ['Expectancy', rStr(s.expectancy)], ['Profit factor', s.pf === Infinity ? '∞' : s.pf.toLocaleString('es-ES', { maximumFractionDigits: 2 })],
-        ['R acumulada', rStr(s.sumR)], ['Ganadas / perdidas / BE', `${s.wins} / ${s.losses} / ${s.be}`], ['Peor racha (R)', rStr(-s.maxDD)],
+        ['Acierto', s.n ? pct(s.wr) : '—'], [u.avg, u.fmt(s.expectancy)], ['Profit factor', s.pf === Infinity ? '∞' : s.pf.toLocaleString('es-ES', { maximumFractionDigits: 2 })],
+        [u.sum, u.fmt(s.sumR)], ['Ganadas / perdidas / BE', `${s.wins} / ${s.losses} / ${s.be}`], [u.dd, u.fmt(-s.maxDD)],
       ].map(([k, v]) => h('div', { class: 'cell' }, h('small', {}, k), h('b', {}, v)))),
-      h('p', { class: 'muted' }, 'Con ratio 1:2, el acierto mínimo para no perder es el 33,3 %.')),
-    sel === 'all' ? table('Por cuenta', groupBy(tr, (t) => accountName(ctx.state, accountOf(t)))) : null,
-    table('Setup completo frente a fuera de plan', bySetup(tr)),
-    table('Por activo', byAsset(tr)),
-    table('Por ventana', byWindow(tr)),
-    table('Por día de la semana', byWeekday(tr)),
+      h('p', { class: 'muted' }, money ? '% de la cuenta: beneficio de cada operación ÷ tamaño de la cuenta.' : sel === 'all' ? 'En Total todo va en R para poder juntar el forward test (sin dinero) con las cuentas. El % de cada cuenta está en su pestaña.' : 'Con ratio 1:2, el acierto mínimo para no perder es el 33,3 %.')),
+    sel === 'all' ? table('Por cuenta', groupBy(tr, (t) => accountName(ctx.state, accountOf(t))), u) : null,
+    table('Setup completo frente a fuera de plan', bySetup(tr), u),
+    table('Por activo', byAsset(tr), u),
+    table('Por ventana', byWindow(tr), u),
+    table('Por día de la semana', byWeekday(tr), u),
   ];
 }

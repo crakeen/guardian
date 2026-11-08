@@ -24,6 +24,14 @@ export const accountOf = (t) => t.accountId || FORWARD;
 export const findAccount = (s, id) => s.accounts.find((a) => a.id === id);
 export const accountName = (s, id) => findAccount(s, id)?.name || 'Sin cuenta';
 export const activeAccount = (s) => findAccount(s, s.config.activeAccount) || s.accounts[0];
+// % de la cuenta que ganó o perdió una operación (beneficio ÷ tamaño). null en el forward test.
+export function pctOf(s, t) {
+  const a = findAccount(s, accountOf(t));
+  if (!a || a.type === 'forward' || typeof t.pnl !== 'number') return null;
+  return (t.pnl / (a.size || 5000)) * 100;
+}
+export const isMoney = (s, id) => { const a = findAccount(s, id); return !!a && a.type !== 'forward'; };
+
 export const tradesOf = (s, id) => (id === 'all' ? s.trades : s.trades.filter((t) => accountOf(t) === id));
 
 // La cuenta activa es la que recibe las operaciones nuevas y la que manda en balance y riesgo.

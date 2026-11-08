@@ -182,3 +182,11 @@ test('la muestra para comprar reto solo cuenta operaciones dentro de plan', () =
   assert.equal(item.ok, false);
   assert.match(item.detail, /25 válidas de 35/);
 });
+
+import { pctOf } from '../src/accounts.js';
+
+test('% de la cuenta: 28 $ en una cuenta de 5.000 $ es +0,56 %', () => {
+  const s = ensureAccounts(base({ trades: [trade({ id: 'fp-nov-1', r: 1.12, pnl: 28 }), trade({ id: 'xl-1', r: 2 })] }));
+  assert.ok(Math.abs(pctOf(s, s.trades[0]) - 0.56) < 1e-9);
+  assert.equal(pctOf(s, s.trades[1]), null); // forward test: sin dinero
+});

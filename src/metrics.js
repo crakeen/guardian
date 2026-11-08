@@ -38,6 +38,9 @@ export function summary(trades) {
   };
 }
 
+// Operaciones que valen para la muestra: dentro de plan y sin reglas rotas.
+export const validTrades = (trades) => closedTrades(trades).filter((t) => t.checklistOk && !t.outOfPlan && !t.flags?.ruleBroken);
+
 export function groupBy(trades, keyFn) {
   const groups = {};
   for (const t of closedTrades(trades)) {

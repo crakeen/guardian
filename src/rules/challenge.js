@@ -1,5 +1,5 @@
 // "¿Puedo comprar un reto?": se contesta con tus números, no con cómo te sientes hoy.
-import { summary } from '../metrics.js';
+import { summary, validTrades } from '../metrics.js';
 import { madrid, daysBetween } from '../time.js';
 
 export const MIN_TRADES = 30;
@@ -9,7 +9,7 @@ export function challengeState(state) {
   const burns = state.log.filter((e) => e.type === 'challenge_burn').sort((a, b) => a.at.localeCompare(b.at));
   const lastBuy = buys.at(-1)?.date || state.config.lastBuy || '';
   const lastBurn = burns.at(-1);
-  const active = buys.length > burns.length;
+  const active = buys.length > burns.length || (state.accounts || []).some((a) => a.type !== 'forward' && a.status === 'active');
   return { buys, burns, lastBuy, lastBurn, active };
 }
 
@@ -23,8 +23,9 @@ export function canBuy(state, now = new Date()) {
   const items = [];
   const add = (label, ok, detail) => items.push({ label, ok, detail });
 
-  add(`Al menos ${MIN_TRADES} operaciones registradas`, s.n >= MIN_TRADES, `Llevas ${s.n}. Te faltan ${Math.max(0, MIN_TRADES - s.n)}.`);
-  add('Expectancy positiva', s.expectancy > 0, `${s.expectancy.toFixed(2)} R por operación.`);
+  const valid = validTrades(state.trades).length;
+  add(`Al menos ${MIN_TRADES} operaciones dentro de plan`, valid >= MIN_TRADES, `Llevas ${valid} válidas de ${s.n} registradas. Te faltan ${Math.max(0, MIN_TRADES - valid)}. Las de fuera de plan no cuentan.`);
+  add('Expectancy positiva', s.expectancy > 0, `${s.expectancy.toLocaleString('es-ES', { maximumFractionDigits: 2 })} R por operación.`);
   add('Checklist completo en el 95 % o más', s.cleanPct >= 0.95, `${Math.round(s.cleanPct * 100)} % con checklist completo (${s.broken} fuera de plan o incompletas).`);
   add('Un solo reto activo', !cs.active, cs.active ? 'Ya tienes un reto activo.' : 'Ninguno activo.');
   const since = cs.lastBurn ? daysBetween(cs.lastBurn.date, today) : null;

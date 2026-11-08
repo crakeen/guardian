@@ -1,5 +1,6 @@
 // Estado de la cuenta y del día: balance, riesgo por operación y bloqueos (protocolo de parada).
 import { madrid, weekStart, addDays } from '../time.js';
+import { accountOf, FORWARD } from '../accounts.js';
 
 const H = 3600e3;
 
@@ -13,8 +14,8 @@ export function pnlOf(t, cfg) {
 }
 
 export function accountTrades(state) {
-  const from = state.config.accountStart || '0000';
-  return closedTrades(state.trades).filter((t) => (t.date || '0000') >= from).sort(byTime);
+  const active = state.config.activeAccount || FORWARD;
+  return closedTrades(state.trades).filter((t) => accountOf(t) === active).sort(byTime);
 }
 
 export function account(state) {

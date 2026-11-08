@@ -1,13 +1,14 @@
 // Todo se guarda en este dispositivo (localStorage). Haz copias en Más → Copia de seguridad.
 import { DEFAULT_CONFIG } from './config.js';
+import { ensureAccounts } from './accounts.js';
 
 const KEY = 'guardian-v1';
 
-export const fresh = () => ({ v: 1, config: { ...DEFAULT_CONFIG }, trades: [], days: {}, log: [], news: [] });
+export const fresh = () => ensureAccounts({ v: 1, config: { ...DEFAULT_CONFIG }, trades: [], days: {}, log: [], news: [], accounts: [] });
 
 function migrate(s) {
   const f = fresh();
-  return { ...f, ...s, config: { ...f.config, ...(s.config || {}) }, days: s.days || {}, log: s.log || [], news: s.news || [] };
+  return ensureAccounts({ ...f, ...s, config: { ...f.config, ...(s.config || {}) }, days: s.days || {}, log: s.log || [], news: s.news || [], accounts: s.accounts || [] });
 }
 
 export function load() {
@@ -47,6 +48,9 @@ export function merge(state, data) {
   const logIds = new Set(state.log.map((e) => e.at + e.type));
   state.log.push(...(data.log || []).filter((e) => !logIds.has(e.at + e.type)));
   for (const [d, v] of Object.entries(data.days || {})) if (!state.days[d]) state.days[d] = v;
+  const accIds = new Set(state.accounts.map((a) => a.id));
+  state.accounts.push(...(data.accounts || []).filter((a) => a && a.id && !accIds.has(a.id)));
   if (data.config) state.config = { ...state.config, ...data.config };
+  ensureAccounts(state);
   return { added, updated };
 }

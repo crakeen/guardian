@@ -21,7 +21,7 @@ function results(ctx, f) {
   const register = (outOfPlan) => ctx.commit((s) => {
     const p = parsed(f);
     s.trades.push({
-      id: uid(), date: madrid(ctx.now()).date, openedAt: new Date().toISOString(), status: 'open',
+      id: uid(), accountId: s.config.activeAccount, date: madrid(ctx.now()).date, openedAt: new Date().toISOString(), status: 'open',
       asset: p.asset, dir: p.dir, entry: p.entry, stop: p.stop, tp: p.tp, zone: p.zone,
       lots: sz.lots, riskUSD: ev.risk.usd, ratioPlan: ev.ratio ? Math.round(ev.ratio * 100) / 100 : null,
       window: windowName(ev.window), checklistOk: !outOfPlan, outOfPlan,

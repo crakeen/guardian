@@ -156,3 +156,29 @@ test('un discurso de un miembro del FOMC no es una decisión de tipos', () => {
   const talk = [{ title: 'FOMC Member Waller Speaks', country: 'USD', time: new Date('2026-11-10T09:00:00Z').getTime() }];
   assert.equal(fomcLock(talk, new Date('2026-11-10T20:00:00Z')), false);
 });
+
+import { ensureAccounts, setActive, tradesOf } from '../src/accounts.js';
+
+test('cuentas: las del Excel van al forward test y las fp-nov a su propia cuenta', () => {
+  const s = ensureAccounts(base({ trades: [trade({ id: 'xl-1', r: 2 }), trade({ id: 'fp-nov-1', r: 1, pnl: 28 })] }));
+  assert.equal(s.trades[0].accountId, 'forward');
+  assert.equal(s.trades[1].accountId, 'cuenta-nov-2026');
+  assert.equal(s.accounts.length, 2);
+  assert.equal(tradesOf(s, 'all').length, 2);
+  assert.equal(tradesOf(s, 'cuenta-nov-2026').length, 1);
+});
+
+test('cuentas: el balance solo suma las operaciones de la cuenta activa', () => {
+  const s = ensureAccounts(base({ trades: [trade({ id: 'xl-1', r: 2, date: '2026-10-01' }), trade({ id: 'fp-nov-1', r: -1, pnl: -40, date: '2026-11-02' })] }));
+  assert.equal(account(s).balance, 5050); // forward: 2R × 25 $
+  setActive(s, 'cuenta-nov-2026');
+  assert.equal(s.config.mode, 'challenge');
+  assert.equal(account(s).balance, 4960);
+});
+
+test('la muestra para comprar reto solo cuenta operaciones dentro de plan', () => {
+  const trades = [...Array(25)].map((_, i) => trade({ id: `a${i}`, r: 2 })).concat([...Array(10)].map((_, i) => trade({ id: `b${i}`, r: 1, outOfPlan: true, checklistOk: false })));
+  const item = canBuy(base({ trades }), MON_0905).items[0];
+  assert.equal(item.ok, false);
+  assert.match(item.detail, /25 válidas de 35/);
+});

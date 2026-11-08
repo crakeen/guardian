@@ -115,3 +115,14 @@ details summary { cursor: pointer; color: var(--accent); margin-top: 12px; }
 .tfs { display: grid; grid-template-columns: 1fr 1fr 1fr; }
 .mini .row { font-size: 14px; padding: 4px 0; }
 button:disabled { opacity: .45; cursor: not-allowed; }
+/* Pestañas de cuentas */
+.subtabs { display: flex; gap: 6px; overflow-x: auto; margin: 0 -16px 12px; padding: 0 16px 2px; scrollbar-width: none; }
+.subtabs::-webkit-scrollbar { display: none; }
+.subtabs button { flex: none; margin: 0; padding: 7px 12px; border-radius: 99px; font-size: 14px; white-space: nowrap; }
+.subtabs button small { color: var(--muted); }
+.subtabs button.on { background: var(--accent); color: #06101f; border-color: var(--accent); font-weight: 600; }
+.subtabs button.on small { color: #06101f; }
+.b.acct { color: var(--accent); }
+.acc { border-top: 1px solid var(--line); padding: 6px 0; }
+.acc.on .row b:first-child { color: var(--accent); }
+.accform { background: var(--bg); border-radius: 10px; padding: 4px 10px 10px; margin-top: 6px; }

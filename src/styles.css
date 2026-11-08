@@ -1,0 +1,90 @@
+:root {
+  --bg: #0b0f17; --card: #141a26; --line: #232c3d; --text: #e7ecf5; --muted: #8b96ab;
+  --go: #22c55e; --go-bg: #0f2a1b; --stop: #ef4444; --stop-bg: #2c1214; --warn: #f59e0b; --accent: #60a5fa;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+body { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+.view { max-width: 640px; margin: 0 auto; padding: calc(12px + env(safe-area-inset-top)) 16px 24px; }
+.top h1 { margin: 8px 0 0; font-size: 28px; }
+.top p { margin: 2px 0 12px; color: var(--muted); }
+h2 { font-size: 15px; margin: 0 0 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+h3 { font-size: 14px; margin: 12px 0 4px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin: 0 0 12px; }
+.status { border-radius: 14px; padding: 16px; margin: 0 0 12px; border: 1px solid; }
+.status b { font-size: 22px; letter-spacing: .03em; display: block; }
+.status b.big { font-size: 44px; }
+.status p, .status ul { margin: 6px 0 0; }
+.status ul { padding-left: 18px; }
+.status li small { color: var(--muted); }
+.status.go { background: var(--go-bg); border-color: var(--go); }
+.status.go b { color: var(--go); }
+.status.stop { background: var(--stop-bg); border-color: var(--stop); }
+.status.stop b { color: var(--stop); }
+.status.night { background: #1d1530; border-color: #a78bfa; }
+.status.night b { color: #c4b5fd; }
+.row { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.row:last-child { border-bottom: 0; }
+.row.live { color: var(--go); font-weight: 600; }
+.row.news.high b { color: var(--stop); }
+.row.news.med b { color: var(--warn); }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cell { background: var(--bg); border-radius: 10px; padding: 10px; }
+.cell small { display: block; color: var(--muted); font-size: 12px; }
+.cell b { font-size: 17px; }
+.muted { color: var(--muted); font-size: 14px; }
+.warn { color: var(--warn); font-size: 14px; }
+.good { color: var(--go); }
+.pos { color: var(--go); }
+.neg { color: var(--stop); }
+.center { text-align: center; }
+.danger { color: #fca5a5; }
+button, .button { display: inline-block; font: inherit; color: var(--text); background: #1f2838; border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; margin: 6px 6px 0 0; cursor: pointer; text-align: center; }
+button.primary { background: var(--accent); color: #06101f; border-color: var(--accent); font-weight: 600; width: 100%; margin-right: 0; }
+button.ghost { background: transparent; color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: 0; margin-top: 8px; }
+.actions.col { flex-direction: column; }
+.actions.col > * { width: 100%; margin-right: 0; }
+.field { display: block; margin: 10px 0; }
+.field > span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.field small { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; }
+input, select, textarea { width: 100%; font: inherit; font-size: 16px; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
+input[type=checkbox] { width: 20px; height: 20px; margin: 0 10px 0 0; flex: none; accent-color: var(--accent); }
+.three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.seg { display: flex; gap: 6px; flex-wrap: wrap; }
+.seg button { flex: 1; margin: 0; padding: 9px 8px; }
+.seg button.on { background: var(--accent); color: #06101f; border-color: var(--accent); font-weight: 600; }
+.steps, .checks, .qs, .pm { list-style: none; padding: 0; margin: 0; }
+.steps li label { display: flex; align-items: flex-start; padding: 6px 0; }
+.qs li { padding: 8px 0; border-bottom: 1px solid var(--line); }
+.qs li > span { display: block; margin-bottom: 6px; font-size: 15px; }
+.checks li { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.checks li b { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; }
+.checks li.ok b { background: var(--go-bg); color: var(--go); }
+.checks li.no b { background: var(--stop-bg); color: var(--stop); }
+.checks li small { display: block; color: var(--muted); font-size: 13px; }
+.pm li { padding: 4px 0; font-size: 14px; }
+.pm li::before { content: '· '; color: var(--muted); }
+.verdict { border-radius: 12px; padding: 12px; margin: 12px 0 4px; }
+.verdict b { font-size: 20px; }
+.verdict p { margin: 4px 0 0; }
+.verdict.go { background: var(--go-bg); color: var(--go); }
+.verdict.stop { background: var(--stop-bg); color: var(--stop); }
+.close { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 10px; }
+.trade { cursor: pointer; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.b { font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--bg); color: var(--muted); }
+.b.ok { color: var(--go); }
+.b.no { color: var(--stop); }
+.detail { margin-top: 8px; }
+.bar { height: 10px; background: var(--bg); border-radius: 99px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; color: var(--muted); font-weight: 500; font-size: 12px; }
+td, th { padding: 6px 4px; border-bottom: 1px solid var(--line); }
+details summary { cursor: pointer; color: var(--accent); margin-top: 12px; }
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; display: flex; background: #0e131d; border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); }
+.tabs button { flex: 1; margin: 0; border: 0; border-radius: 0; background: none; color: var(--muted); padding: 8px 0 10px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; }
+.tabs button i { font-style: normal; font-size: 18px; }
+.tabs button.on { color: var(--accent); }

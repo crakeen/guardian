@@ -1,0 +1,11 @@
+{
+  "name": "guardian",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Jefe de riesgo para tu plan de trading: checklist, lotaje, paradas y métricas.",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "start": "python3 -m http.server 5174"
+  }
+}

@@ -1,0 +1,66 @@
+{
+ "fetchedAt": "2026-11-08T15:12:58+00:00",
+ "source": "Forex Factory",
+ "events": [
+  {
+   "title": "BOE Gov Bailey Speaks",
+   "country": "GBP",
+   "date": "2026-11-09T12:25:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "FOMC Member Waller Speaks",
+   "country": "USD",
+   "date": "2026-11-10T04:00:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "Core CPI m/m",
+   "country": "USD",
+   "date": "2026-11-10T08:30:00-05:00",
+   "impact": "High"
+  },
+  {
+   "title": "CPI m/m",
+   "country": "USD",
+   "date": "2026-11-10T08:30:00-05:00",
+   "impact": "High"
+  },
+  {
+   "title": "GDP m/m",
+   "country": "GBP",
+   "date": "2026-11-12T02:00:00-05:00",
+   "impact": "High"
+  },
+  {
+   "title": "Prelim GDP q/q",
+   "country": "GBP",
+   "date": "2026-11-12T02:00:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "Unemployment Claims",
+   "country": "USD",
+   "date": "2026-11-12T08:30:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "ECB President Lagarde Speaks",
+   "country": "EUR",
+   "date": "2026-11-12T14:30:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "Core PPI m/m",
+   "country": "USD",
+   "date": "2026-11-13T08:30:00-05:00",
+   "impact": "High"
+  },
+  {
+   "title": "PPI m/m",
+   "country": "USD",
+   "date": "2026-11-13T08:30:00-05:00",
+   "impact": "High"
+  }
+ ]
+}

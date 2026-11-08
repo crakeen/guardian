@@ -1,6 +1,9 @@
 // Valores por defecto: reglas públicas de FundingPips 2-Step Pro (5.000 $) y del Protocolo Diciembre.
 // Tus datos reales se cambian en Más → Ajustes y se guardan solo en tu dispositivo.
 
+// Súbela junto con VERSION en sw.js en cada publicación.
+export const APP_VERSION = 'gd-v4';
+
 export const INSTRUMENTS = {
   EURUSD: { contract: 100000, unit: 0.0001, unitName: 'pips', minStop: 0.0015, digits: 5, ccys: ['EUR', 'USD'] },
   GBPUSD: { contract: 100000, unit: 0.0001, unitName: 'pips', minStop: 0.0015, digits: 5, ccys: ['GBP', 'USD'] },

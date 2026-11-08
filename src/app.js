@@ -61,4 +61,20 @@ window.addEventListener('hashchange', () => {
 render();
 loadCalendar().then((c) => { calendar = c; render(); });
 navigator.storage?.persist?.();
-if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js');
+
+// Actualización automática: al volver a la app (el iPhone no la recarga, la "despierta") se busca
+// una versión nueva; si la hay, el service worker nuevo toma el control y la página se recarga sola.
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadController || reloading) return;
+    reloading = true;
+    location.reload();
+  });
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then((reg) => {
+    const check = () => reg.update().catch(() => {});
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') check(); });
+    setInterval(check, 30 * 60e3);
+  });
+}

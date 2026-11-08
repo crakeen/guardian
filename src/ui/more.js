@@ -3,6 +3,7 @@ import { h, card, field, select, check, num, usd } from './dom.js';
 import { canBuy, challengeState } from '../rules/challenge.js';
 import { madrid, fmtDate, fmtTime, addDays } from '../time.js';
 import { download, merge, fresh } from '../store.js';
+import { APP_VERSION } from '../config.js';
 
 const nowIso = () => new Date().toISOString();
 
@@ -128,6 +129,6 @@ export function renderMore(ctx) {
     challengeCard(ctx),
     settingsCard(ctx),
     backupCard(ctx),
-    h('p', { class: 'muted center' }, 'Herramienta personal de disciplina. No es asesoría financiera.'),
+    h('p', { class: 'muted center' }, `Versión ${APP_VERSION} · Herramienta personal de disciplina. No es asesoría financiera.`),
   ];
 }

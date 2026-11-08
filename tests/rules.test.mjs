@@ -7,6 +7,7 @@ import { evaluate, currentWindow } from '../src/rules/gate.js';
 import { canBuy } from '../src/rules/challenge.js';
 import { summary, wilson } from '../src/metrics.js';
 import { madrid, nyToMadridOffset, weekStart } from '../src/time.js';
+import { isRateDecision, fomcLock } from '../src/news.js';
 
 const base = (over = {}) => ({ config: { ...DEFAULT_CONFIG }, trades: [], days: {}, log: [], news: [], ...over });
 const MON_0905 = new Date('2026-11-09T08:05:00Z'); // lunes, 09:05 España, 03:05 NY
@@ -144,4 +145,14 @@ test('métricas y compra de reto con 22 operaciones', () => {
   assert.equal(cb.ok, false);
   const [lo, hi] = wilson(6, 8);
   assert.ok(lo > 0.4 && lo < 0.42 && hi > 0.92);
+});
+
+test('un discurso de un miembro del FOMC no es una decisión de tipos', () => {
+  assert.equal(isRateDecision({ title: 'FOMC Member Waller Speaks' }), false);
+  assert.equal(isRateDecision({ title: 'MPC Member Mann Speaks' }), false);
+  assert.equal(isRateDecision({ title: 'Federal Funds Rate' }), true);
+  assert.equal(isRateDecision({ title: 'Main Refinancing Rate' }), true);
+  assert.equal(isRateDecision({ title: 'Official Bank Rate' }), true);
+  const talk = [{ title: 'FOMC Member Waller Speaks', country: 'USD', time: new Date('2026-11-10T09:00:00Z').getTime() }];
+  assert.equal(fomcLock(talk, new Date('2026-11-10T20:00:00Z')), false);
 });

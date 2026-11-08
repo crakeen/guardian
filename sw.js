@@ -1,11 +1,11 @@
 // Service worker: guarda la app para que funcione sin conexión.
 // Sube VERSION cada vez que publiques cambios.
-const VERSION = 'gd-v1';
+const VERSION = 'gd-v2';
 const FILES = [
   './', 'index.html', 'manifest.webmanifest', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png',
   'src/styles.css', 'src/app.js', 'src/config.js', 'src/time.js', 'src/store.js', 'src/news.js', 'src/metrics.js',
   'src/rules/sizing.js', 'src/rules/account.js', 'src/rules/gate.js', 'src/rules/challenge.js',
-  'src/ui/dom.js', 'src/ui/today.js', 'src/ui/entry.js', 'src/ui/close.js', 'src/ui/journal.js', 'src/ui/stats.js', 'src/ui/more.js',
+  'src/ui/dom.js', 'src/ui/today.js', 'src/ui/entry.js', 'src/ui/close.js', 'src/ui/journal.js', 'src/ui/stats.js', 'src/ui/more.js', 'src/ui/routine.js', 'src/ui/schedule.js',
   'data/calendar.json',
 ];
 

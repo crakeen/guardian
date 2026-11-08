@@ -109,9 +109,9 @@ function backupCard(ctx) {
           if (!file) return;
           try {
             const data = JSON.parse(await file.text());
-            let added = 0;
-            ctx.commit((s) => { added = merge(s, data); });
-            alert(`Importadas ${added} operaciones nuevas.`);
+            let res = { added: 0, updated: 0 };
+            ctx.commit((s) => { res = merge(s, data); });
+            alert(`${res.added} operaciones nuevas y ${res.updated} actualizadas.`);
           } catch { alert('El archivo no es una copia válida.'); }
         } })),
       h('button', { class: 'ghost', onclick: () => {

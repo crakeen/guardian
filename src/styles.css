@@ -88,3 +88,30 @@ details summary { cursor: pointer; color: var(--accent); margin-top: 12px; }
 .tabs button { flex: 1; margin: 0; border: 0; border-radius: 0; background: none; color: var(--muted); padding: 8px 0 10px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; }
 .tabs button i { font-style: normal; font-size: 18px; }
 .tabs button.on { color: var(--accent); }
+/* Horario por bloques */
+.block { border-left: 3px solid var(--line); padding: 8px 0 8px 12px; margin: 0 0 8px; }
+.block-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.block-head .time { color: var(--muted); font-variant-numeric: tabular-nums; min-width: 92px; }
+.block-head b { flex: 1; }
+.block .badge { font-size: 12px; padding: 1px 8px; border-radius: 99px; background: var(--bg); color: var(--muted); }
+.block-body p { margin: 6px 0 4px; }
+.block-body ul { margin: 0; padding-left: 18px; font-size: 14px; }
+.block-body li { margin: 3px 0; }
+.block.entry { border-left-color: var(--go); }
+.block.prep { border-left-color: var(--accent); }
+.block.exit, .block.manage { border-left-color: var(--warn); }
+.block.off { border-left-color: #6b7280; }
+.block.past { opacity: .45; }
+.block.now { background: var(--bg); border-radius: 0 10px 10px 0; }
+.block.now .badge { background: var(--go); color: #06101f; font-weight: 700; }
+/* Rutina paso a paso */
+.rstep { border-top: 1px solid var(--line); padding: 12px 0; }
+.rstep-head { display: flex; gap: 10px; align-items: center; margin-bottom: 6px; }
+.rstep .num { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--bg); color: var(--muted); font-weight: 700; font-size: 14px; flex: none; }
+.rstep.done .num { background: var(--go-bg); color: var(--go); }
+.rstep-body { padding-left: 36px; }
+.rstep-body p { margin: 4px 0 8px; }
+.tick { display: flex; align-items: flex-start; gap: 0; padding: 6px 0; }
+.tfs { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.mini .row { font-size: 14px; padding: 4px 0; }
+button:disabled { opacity: .45; cursor: not-allowed; }

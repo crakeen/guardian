@@ -3,7 +3,10 @@
 import { madrid, newYork } from './time.js';
 
 const RATE = /(Funds Rate|Refinancing Rate|Bank Rate|Rate Decision|Rate Statement|Monetary Policy)/i;
-const FOMC = /(FOMC|Federal Funds Rate)/i;
+const FOMC = /(FOMC Statement|FOMC Press Conference|Federal Funds Rate)/i;
+const TALK = /(Speaks|Speech|Testifies|Minutes|Hearing|Member)/i;
+// Decisión de tipos real, no un discurso de un miembro del banco central.
+export const isRateDecision = (e) => (RATE.test(e.title) || FOMC.test(e.title)) && !TALK.test(e.title);
 
 export async function loadCalendar() {
   try {
@@ -40,12 +43,18 @@ export function highSoon(events, ccys, now = new Date(), hours = 2) {
 // Decisión de tipos más tarde hoy en esa divisa: no se opera la sesión de antes.
 export function rateLaterToday(events, ccys, now = new Date()) {
   const d = madrid(now).date;
-  return events.filter((e) => RATE.test(e.title) && inCcys(e, ccys) && e.time > now.getTime() && madrid(new Date(e.time)).date === d);
+  return events.filter((e) => isRateDecision(e) && inCcys(e, ccys) && e.time > now.getTime() && madrid(new Date(e.time)).date === d);
+}
+
+// Decisiones de tipos (y FOMC) de USD, EUR o GBP en cualquier momento de hoy.
+export function ratesToday(events, now = new Date()) {
+  const d = madrid(now).date;
+  return events.filter((e) => isRateDecision(e) && ['USD', 'EUR', 'GBP'].includes(e.country) && madrid(new Date(e.time)).date === d);
 }
 
 // Día de FOMC después de las 14:00 de Nueva York.
 export function fomcLock(events, now = new Date()) {
   const ny = newYork(now);
-  const fomc = events.some((e) => e.country === 'USD' && FOMC.test(e.title) && newYork(new Date(e.time)).date === ny.date);
+  const fomc = events.some((e) => e.country === 'USD' && FOMC.test(e.title) && !TALK.test(e.title) && newYork(new Date(e.time)).date === ny.date);
   return fomc && ny.min >= 14 * 60;
 }

@@ -1,5 +1,5 @@
 // Diario: operaciones y días sin operación, con autopsia de cada una.
-import { h, card, field, select, seg, num, rStr, usd, pctStr } from './dom.js';
+import { h, card, field, select, seg, num, rStr, usd, pctStr, signed } from './dom.js';
 import { INSTRUMENTS } from '../config.js';
 import { fmtDate, madrid } from '../time.js';
 import { uid } from '../store.js';
@@ -88,7 +88,7 @@ function addPast(ctx) {
     field('Hora de entrada (España)', h('input', { type: 'time', value: f.time || '', oninput: (e) => { f.time = e.target.value; } }), other ? 'Desde esta hora cuentan las 24 h.' : 'Opcional.'),
     field('Dirección', seg(f.dir, { buy: 'Compra', sell: 'Venta' }, (v) => { f.dir = v; ctx.render(); })),
     isMoney(ctx.state, f.accountId) ? moneyFields(f.money ||= {})
-      : field('Resultado en R', h('input', { inputmode: 'decimal', value: f.r, placeholder: '+2, −1 o 0 (break even = 0, nunca "BE")', oninput: (e) => { f.r = e.target.value; } })),
+      : field('Resultado en R', signed(f.r, '+2, −1 o 0 (break even = 0)', (v) => { f.r = v; })),
     other ? null : field('¿Setup completo?', seg(f.setup, { si: 'Sí, los 6 puntos', no: 'No' }, (v) => { f.setup = v; ctx.render(); })),
     field('Ventana', select(f.window, Object.fromEntries(WINDOWS.map((w) => [w, w])), (v) => { f.window = v; })),
     field('Nota', h('textarea', { rows: 2, value: f.note, oninput: (e) => { f.note = e.target.value; } })),

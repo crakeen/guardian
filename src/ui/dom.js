@@ -18,7 +18,7 @@ export function h(tag, props = {}, ...kids) {
 }
 
 export const num = (s) => {
-  const v = parseFloat(String(s ?? '').replace(',', '.'));
+  const v = parseFloat(String(s ?? '').replace(',', '.').replace(/^[−–]/, '-').replace(/\s/g, ''));
   return Number.isFinite(v) ? v : null;
 };
 
@@ -26,6 +26,18 @@ export const usd = (v) => `${v < 0 ? '−' : ''}${Math.abs(v).toLocaleString('es
 export const pct = (v, d = 0) => `${(v * 100).toLocaleString('es-ES', { maximumFractionDigits: d })} %`;
 export const pctStr = (v) => `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} %`;
 export const rStr = (r) => `${r > 0 ? '+' : r < 0 ? '−' : ''}${Math.abs(r).toLocaleString('es-ES', { maximumFractionDigits: 2 })}R`;
+
+// Campo numérico con botón ± : el teclado decimal del iPhone no tiene signo menos.
+export function signed(value, placeholder, onvalue) {
+  const input = h('input', { inputmode: 'decimal', value: value ?? '', placeholder, oninput: (e) => onvalue(e.target.value) });
+  const flip = () => {
+    const v = input.value.trim().replace(/^[−–]/, '-');
+    input.value = v.startsWith('-') ? v.slice(1) : v.startsWith('+') ? `-${v.slice(1)}` : `-${v}`;
+    onvalue(input.value);
+    input.focus();
+  };
+  return h('div', { class: 'signed' }, input, h('button', { type: 'button', class: 'sign', 'aria-label': 'Cambiar signo', onclick: flip }, '±'));
+}
 
 export const card = (title, ...kids) => h('section', { class: 'card' }, title ? h('h2', {}, title) : null, ...kids);
 

@@ -1,5 +1,5 @@
 // Beneficio, swap y comisión tal como salen en MT5. El neto (lo que cuenta) es la suma de los tres.
-import { h, field, num, usd } from './dom.js';
+import { h, field, num, usd, signed } from './dom.js';
 
 export const netOf = (gross, swap, commission) => (gross || 0) + (swap || 0) + (commission || 0);
 
@@ -10,7 +10,7 @@ export function moneyFields(f, hint = {}) {
     const g = num(f.gross);
     out.textContent = g === null ? 'Neto: escribe el beneficio' : `Neto: ${usd(netOf(g, num(f.swap), num(f.commission)))}`;
   };
-  const input = (key, ph) => h('input', { inputmode: 'decimal', value: f[key] ?? '', placeholder: ph, oninput: (e) => { f[key] = e.target.value; refresh(); } });
+  const input = (key, ph) => signed(f[key], ph, (v) => { f[key] = v; refresh(); });
   refresh();
   return h('div', { class: 'money' },
     h('div', { class: 'three' },
@@ -18,7 +18,7 @@ export function moneyFields(f, hint = {}) {
       field('Swap', input('swap', '0')),
       field('Comisión', input('commission', hint.commission ?? '0'))),
     out,
-    h('p', { class: 'muted' }, 'Cópialos de MT5 con su signo (la comisión y casi siempre el swap van en negativo). El neto es lo que cuenta para el balance, los topes y el %.'));
+    h('p', { class: 'muted' }, 'Cópialos de MT5 con su signo; pulsa ± para el negativo (la comisión y casi siempre el swap van en negativo). El neto es lo que cuenta para el balance, los topes y el %.'));
 }
 
 // Devuelve { gross, swap, commission, pnl } o null si falta el beneficio.

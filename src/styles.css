@@ -127,3 +127,8 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .acc.on .row b:first-child { color: var(--accent); }
 .accform { background: var(--bg); border-radius: 10px; padding: 4px 10px 10px; margin-top: 6px; }
 .net { font-weight: 600; margin: 4px 0; }
+
+.signed { display: flex; gap: 3px; }
+.three .signed input { padding-left: 8px; padding-right: 6px; }
+.signed input { flex: 1; min-width: 0; }
+.signed .sign { flex: 0 0 auto; width: 34px; margin: 0; padding: 0; font-size: 18px; }

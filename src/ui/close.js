@@ -1,5 +1,5 @@
 // Cerrar una operación abierta: resultado en R, dinero real (si es cuenta) y preguntas honestas.
-import { h, field, seg, num, rStr } from './dom.js';
+import { h, field, seg, num, rStr, signed } from './dom.js';
 import { moneyFields, readMoney } from './money.js';
 import { isMoney, accountOf } from '../accounts.js';
 
@@ -34,7 +34,7 @@ export function renderClose(ctx, t) {
   return h('div', { class: 'close' },
     h('p', {}, h('b', {}, '¿Cómo ha terminado?')),
     seg(f.kind, { tp: `Objetivo ${rStr(t.ratioPlan || 2)}`, sl: 'Stop −1R', be: 'Break even', manual: 'Otro' }, (v) => { f.kind = v; ctx.render(); }),
-    f.kind === 'manual' ? field('Resultado en R', h('input', { inputmode: 'decimal', value: f.r || '', placeholder: 'ej. 0,6 o −0,4', oninput: (e) => { f.r = e.target.value; } })) : null,
+    f.kind === 'manual' ? field('Resultado en R', signed(f.r, 'ej. 0,6 o −0,4', (v) => { f.r = v; })) : null,
     !forward && f.kind ? moneyFields(f.money, { gross: r !== null ? String((r * t.riskUSD).toFixed(2)).replace('.', ',') : '' }) : null,
     f.kind ? h('ul', { class: 'steps' }, FLAGS.map(([k, l, broken]) => h('li', {}, h('label', { class: broken ? 'danger' : '' },
       h('input', { type: 'checkbox', checked: !!f.flags[k], onchange: (e) => { f.flags[k] = e.target.checked; } }), l)))) : null,

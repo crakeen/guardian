@@ -7,6 +7,7 @@ import { accountOf, accountName, findAccount, tradesOf, pctOf, isMoney } from '.
 import { moneyFields, readMoney, moneyForm } from './money.js';
 import { acctTabs } from './acctTabs.js';
 
+const OTHER = '__otro';
 const WINDOWS = ['Londres 9:00', 'Londres 10:00', 'Londres', 'Apertura semanal', 'Nueva York', 'Fuera de ventana'];
 
 function postmortem(t) {
@@ -75,15 +76,20 @@ function tradeCard(ctx, t) {
 function addPast(ctx) {
   const def = ctx.ui.acct && ctx.ui.acct !== 'all' ? ctx.ui.acct : ctx.state.config.activeAccount;
   const f = (ctx.ui.past ||= { date: madrid(ctx.now()).date, asset: 'EURUSD', dir: 'buy', r: '', setup: 'si', window: 'Londres 9:00', note: '', accountId: def });
+  const other = f.asset === OTHER;
   if (!ctx.ui.showPast) return h('button', { onclick: () => { ctx.ui.past = null; ctx.ui.showPast = true; ctx.render(); } }, 'Añadir operación pasada');
   return card('Operación pasada',
     field('Cuenta', select(f.accountId, Object.fromEntries(ctx.state.accounts.map((a) => [a.id, a.name])), (v) => { f.accountId = v; ctx.render(); })),
     field('Fecha', h('input', { type: 'date', value: f.date, oninput: (e) => { f.date = e.target.value; } })),
-    field('Activo', select(f.asset, Object.fromEntries(Object.keys(INSTRUMENTS).map((k) => [k, k])), (v) => { f.asset = v; })),
+    field('Activo', select(f.asset, { ...Object.fromEntries(Object.keys(INSTRUMENTS).map((k) => [k, k])), [OTHER]: 'Otro (fuera del plan)' }, (v) => { f.asset = v; ctx.render(); })),
+    other ? h('div', { class: 'warn' },
+      h('p', {}, h('b', {}, 'Activo fuera del plan. '), 'R5: solo EURUSD, GBPUSD y XAUUSD. Se guarda como regla rota: 24 h sin operar desde la hora de entrada, y no cuenta para la muestra válida.'),
+      field('¿Qué activo?', h('input', { value: f.other || '', placeholder: 'ej. GER40', autocapitalize: 'characters', oninput: (e) => { f.other = e.target.value; } }))) : null,
+    field('Hora de entrada (España)', h('input', { type: 'time', value: f.time || '', oninput: (e) => { f.time = e.target.value; } }), other ? 'Desde esta hora cuentan las 24 h.' : 'Opcional.'),
     field('Dirección', seg(f.dir, { buy: 'Compra', sell: 'Venta' }, (v) => { f.dir = v; ctx.render(); })),
     isMoney(ctx.state, f.accountId) ? moneyFields(f.money ||= {})
       : field('Resultado en R', h('input', { inputmode: 'decimal', value: f.r, placeholder: '+2, −1 o 0 (break even = 0, nunca "BE")', oninput: (e) => { f.r = e.target.value; } })),
-    field('¿Setup completo?', seg(f.setup, { si: 'Sí, los 6 puntos', no: 'No' }, (v) => { f.setup = v; ctx.render(); })),
+    other ? null : field('¿Setup completo?', seg(f.setup, { si: 'Sí, los 6 puntos', no: 'No' }, (v) => { f.setup = v; ctx.render(); })),
     field('Ventana', select(f.window, Object.fromEntries(WINDOWS.map((w) => [w, w])), (v) => { f.window = v; })),
     field('Nota', h('textarea', { rows: 2, value: f.note, oninput: (e) => { f.note = e.target.value; } })),
     h('div', { class: 'actions' },
@@ -94,8 +100,14 @@ function addPast(ctx) {
         const risk = (findAccount(ctx.state, f.accountId)?.size || 5000) * 0.005;
         const r = money ? Math.round((m.pnl / risk) * 100) / 100 : num(f.r);
         if (r === null) { alert('Indica el resultado en R.'); return; }
+        const name = other ? (f.other || '').trim().toUpperCase().replace(/[^A-Z0-9.]/g, '').slice(0, 12) : f.asset;
+        if (!name) { alert('Escribe qué activo operaste.'); return; }
+        if (other && !f.time) { alert('Pon la hora de entrada: desde ahí cuentan las 24 h sin operar.'); return; }
+        const openedAt = f.time && f.date ? `${f.date}T${f.time}:00` : undefined;
         ctx.commit((s) => {
-          s.trades.push({ id: uid(), ...(m || {}), accountId: f.accountId, date: f.date || null, asset: f.asset, dir: f.dir, r, status: 'closed', checklistOk: f.setup === 'si', outOfPlan: false, window: f.window, note: f.note, riskUSD: risk, closedAt: `${f.date}T12:00:00`, source: 'manual' });
+          s.trades.push({ id: uid(), ...(m || {}), accountId: f.accountId, date: f.date || null, asset: name, dir: f.dir, r, status: 'closed',
+            checklistOk: !other && f.setup === 'si', outOfPlan: other, failed: other ? ['Activo fuera del plan (R5: solo EURUSD, GBPUSD y XAUUSD)'] : undefined,
+            window: f.window, note: f.note, riskUSD: risk, openedAt, closedAt: openedAt || `${f.date}T12:00:00`, source: 'manual' });
           ctx.ui.past = null; ctx.ui.showPast = false;
         });
       } }, 'Guardar'),

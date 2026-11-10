@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-09T13:50:59+00:00",
+ "fetchedAt": "2026-11-10T13:26:31+00:00",
  "source": "Forex Factory",
  "events": [
   {
@@ -25,6 +25,12 @@
    "country": "USD",
    "date": "2026-11-10T08:30:00-05:00",
    "impact": "High"
+  },
+  {
+   "title": "ECB President Lagarde Speaks",
+   "country": "EUR",
+   "date": "2026-11-11T04:45:00-05:00",
+   "impact": "Medium"
   },
   {
    "title": "GDP m/m",

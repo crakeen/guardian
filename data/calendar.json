@@ -1,72 +1,114 @@
 {
- "fetchedAt": "2026-11-13T13:03:48+00:00",
+ "fetchedAt": "2026-11-15T22:44:21+00:00",
  "source": "Forex Factory",
  "events": [
   {
-   "title": "BOE Gov Bailey Speaks",
-   "country": "GBP",
-   "date": "2026-11-09T12:25:00-05:00",
-   "impact": "Medium"
-  },
-  {
-   "title": "FOMC Member Waller Speaks",
+   "title": "Fed Chairman Warsh Speaks",
    "country": "USD",
-   "date": "2026-11-10T04:00:00-05:00",
-   "impact": "Medium"
-  },
-  {
-   "title": "Core CPI m/m",
-   "country": "USD",
-   "date": "2026-11-10T08:30:00-05:00",
+   "date": "2026-11-16T12:00:00-05:00",
    "impact": "High"
   },
   {
-   "title": "CPI m/m",
+   "title": "Average Earnings Index 3m/y",
+   "country": "GBP",
+   "date": "2026-11-17T02:00:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "Core Retail Sales m/m",
    "country": "USD",
-   "date": "2026-11-10T08:30:00-05:00",
+   "date": "2026-11-17T08:30:00-05:00",
+   "impact": "High"
+  },
+  {
+   "title": "Retail Sales m/m",
+   "country": "USD",
+   "date": "2026-11-17T08:30:00-05:00",
+   "impact": "High"
+  },
+  {
+   "title": "CPI y/y",
+   "country": "GBP",
+   "date": "2026-11-18T02:00:00-05:00",
+   "impact": "High"
+  },
+  {
+   "title": "BOE Gov Bailey Speaks",
+   "country": "GBP",
+   "date": "2026-11-18T02:30:00-05:00",
+   "impact": "High"
+  },
+  {
+   "title": "ECB Financial Stability Review",
+   "country": "EUR",
+   "date": "2026-11-18T04:00:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "ECB President Lagarde Speaks",
+   "country": "EUR",
+   "date": "2026-11-18T09:25:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "BOE Gov Bailey Speaks",
+   "country": "GBP",
+   "date": "2026-11-18T10:00:00-05:00",
+   "impact": "High"
+  },
+  {
+   "title": "FOMC Meeting Minutes",
+   "country": "USD",
+   "date": "2026-11-18T14:00:00-05:00",
    "impact": "High"
   },
   {
    "title": "ECB President Lagarde Speaks",
    "country": "EUR",
-   "date": "2026-11-11T04:45:00-05:00",
+   "date": "2026-11-19T08:30:00-05:00",
    "impact": "Medium"
   },
   {
-   "title": "GDP m/m",
-   "country": "GBP",
-   "date": "2026-11-12T02:00:00-05:00",
-   "impact": "High"
-  },
-  {
-   "title": "Prelim GDP q/q",
-   "country": "GBP",
-   "date": "2026-11-12T02:00:00-05:00",
+   "title": "Philly Fed Manufacturing Index",
+   "country": "USD",
+   "date": "2026-11-19T08:30:00-05:00",
    "impact": "Medium"
   },
   {
    "title": "Unemployment Claims",
    "country": "USD",
-   "date": "2026-11-12T08:30:00-05:00",
+   "date": "2026-11-19T08:30:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "Retail Sales m/m",
+   "country": "GBP",
+   "date": "2026-11-20T02:00:00-05:00",
    "impact": "Medium"
   },
   {
    "title": "ECB President Lagarde Speaks",
    "country": "EUR",
-   "date": "2026-11-12T14:30:00-05:00",
+   "date": "2026-11-20T03:15:00-05:00",
    "impact": "Medium"
   },
   {
-   "title": "Core PPI m/m",
+   "title": "FOMC Member Waller Speaks",
    "country": "USD",
-   "date": "2026-11-13T08:30:00-05:00",
-   "impact": "High"
+   "date": "2026-11-20T08:25:00-05:00",
+   "impact": "Medium"
   },
   {
-   "title": "PPI m/m",
+   "title": "Revised UoM Consumer Sentiment",
    "country": "USD",
-   "date": "2026-11-13T08:30:00-05:00",
-   "impact": "High"
+   "date": "2026-11-20T10:00:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "Revised UoM Inflation Expectations",
+   "country": "USD",
+   "date": "2026-11-20T10:00:00-05:00",
+   "impact": "Medium"
   }
  ]
 }

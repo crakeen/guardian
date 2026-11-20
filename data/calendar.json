@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-19T14:22:55+00:00",
+ "fetchedAt": "2026-11-20T13:58:30+00:00",
  "source": "Forex Factory",
  "events": [
   {
@@ -102,6 +102,12 @@
    "title": "Revised UoM Inflation Expectations",
    "country": "USD",
    "date": "2026-11-20T10:00:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "President Trump Speaks",
+   "country": "USD",
+   "date": "2026-11-20T12:00:00-05:00",
    "impact": "Medium"
   }
  ]

@@ -1,113 +1,83 @@
 {
- "fetchedAt": "2026-11-20T13:58:30+00:00",
+ "fetchedAt": "2026-11-22T23:33:08+00:00",
  "source": "Forex Factory",
  "events": [
   {
-   "title": "Fed Chairman Warsh Speaks",
-   "country": "USD",
-   "date": "2026-11-16T12:00:00-05:00",
-   "impact": "High"
-  },
-  {
-   "title": "Average Earnings Index 3m/y",
-   "country": "GBP",
-   "date": "2026-11-17T02:00:00-05:00",
-   "impact": "Medium"
-  },
-  {
-   "title": "Core Retail Sales m/m",
-   "country": "USD",
-   "date": "2026-11-17T08:30:00-05:00",
-   "impact": "High"
-  },
-  {
-   "title": "Retail Sales m/m",
-   "country": "USD",
-   "date": "2026-11-17T08:30:00-05:00",
-   "impact": "High"
-  },
-  {
-   "title": "CPI y/y",
-   "country": "GBP",
-   "date": "2026-11-18T02:00:00-05:00",
-   "impact": "High"
-  },
-  {
-   "title": "BOE Gov Bailey Speaks",
-   "country": "GBP",
-   "date": "2026-11-18T02:30:00-05:00",
-   "impact": "Medium"
-  },
-  {
-   "title": "ECB Financial Stability Review",
+   "title": "French Flash Manufacturing PMI",
    "country": "EUR",
-   "date": "2026-11-18T04:00:00-05:00",
+   "date": "2026-11-23T03:15:00-05:00",
    "impact": "Medium"
   },
   {
-   "title": "ECB President Lagarde Speaks",
+   "title": "French Flash Services PMI",
    "country": "EUR",
-   "date": "2026-11-18T09:25:00-05:00",
+   "date": "2026-11-23T03:15:00-05:00",
    "impact": "Medium"
   },
   {
-   "title": "BOE Gov Bailey Speaks",
+   "title": "German Flash Manufacturing PMI",
+   "country": "EUR",
+   "date": "2026-11-23T03:30:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "German Flash Services PMI",
+   "country": "EUR",
+   "date": "2026-11-23T03:30:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "Flash Manufacturing PMI",
    "country": "GBP",
-   "date": "2026-11-18T10:00:00-05:00",
-   "impact": "High"
-  },
-  {
-   "title": "FOMC Meeting Minutes",
-   "country": "USD",
-   "date": "2026-11-18T14:00:00-05:00",
-   "impact": "High"
-  },
-  {
-   "title": "ECB President Lagarde Speaks",
-   "country": "EUR",
-   "date": "2026-11-19T08:30:00-05:00",
+   "date": "2026-11-23T04:30:00-05:00",
    "impact": "Medium"
   },
   {
-   "title": "Philly Fed Manufacturing Index",
+   "title": "Flash Services PMI",
+   "country": "GBP",
+   "date": "2026-11-23T04:30:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "Flash Manufacturing PMI",
    "country": "USD",
-   "date": "2026-11-19T08:30:00-05:00",
+   "date": "2026-11-23T09:45:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "Flash Services PMI",
+   "country": "USD",
+   "date": "2026-11-23T09:45:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "CB Consumer Confidence",
+   "country": "USD",
+   "date": "2026-11-24T10:00:00-05:00",
+   "impact": "Medium"
+  },
+  {
+   "title": "Core PCE Price Index m/m",
+   "country": "USD",
+   "date": "2026-11-25T08:30:00-05:00",
+   "impact": "High"
+  },
+  {
+   "title": "Prelim GDP q/q",
+   "country": "USD",
+   "date": "2026-11-25T08:30:00-05:00",
+   "impact": "High"
+  },
+  {
+   "title": "Prelim GDP Price Index q/q",
+   "country": "USD",
+   "date": "2026-11-25T08:30:00-05:00",
    "impact": "Medium"
   },
   {
    "title": "Unemployment Claims",
    "country": "USD",
-   "date": "2026-11-19T08:30:00-05:00",
-   "impact": "Medium"
-  },
-  {
-   "title": "Retail Sales m/m",
-   "country": "GBP",
-   "date": "2026-11-20T02:00:00-05:00",
-   "impact": "Medium"
-  },
-  {
-   "title": "ECB President Lagarde Speaks",
-   "country": "EUR",
-   "date": "2026-11-20T03:15:00-05:00",
-   "impact": "Medium"
-  },
-  {
-   "title": "Revised UoM Consumer Sentiment",
-   "country": "USD",
-   "date": "2026-11-20T10:00:00-05:00",
-   "impact": "Medium"
-  },
-  {
-   "title": "Revised UoM Inflation Expectations",
-   "country": "USD",
-   "date": "2026-11-20T10:00:00-05:00",
-   "impact": "Medium"
-  },
-  {
-   "title": "President Trump Speaks",
-   "country": "USD",
-   "date": "2026-11-20T12:00:00-05:00",
+   "date": "2026-11-25T08:30:00-05:00",
    "impact": "Medium"
   }
  ]
